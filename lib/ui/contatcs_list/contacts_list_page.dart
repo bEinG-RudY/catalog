@@ -1,4 +1,5 @@
 import 'package:catalog/data/contact.dart';
+import 'package:catalog/ui/contatcs_list/widget/contact_tile.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,23 @@ class _ContactsListPageState extends State<ContactsListPage> {
       body: ListView.builder(
         itemCount: _contacts.length,
         itemBuilder: ((context, index) {
-          return new ContactTile(contacts: _contacts);
+          return new ContactTile(
+            contact: _contacts[index],
+            onFavoritePressed: () {
+              setState(() {
+                _contacts[index].isFavorite = !_contacts[index].isFavorite;
+                _contacts.sort(((a, b) {
+                  if (a.isFavorite) {
+                    return -1;
+                  } else if (b.isFavorite) {
+                    return 1;
+                  } else {
+                    return 0;
+                  }
+                }));
+              });
+            },
+          );
         }),
       ),
     );
