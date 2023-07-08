@@ -1,3 +1,5 @@
 {
-    "workbench.preferredDarkColorTheme": "Default Light Modern"
+    "workbench.preferredDarkColorTheme": "Default Light Modern",
+    "dart.flutterHotReloadOnSave": "all",
+    "dart.hotReloadOnSave": "all"
 }
