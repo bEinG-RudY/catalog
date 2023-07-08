@@ -1,6 +1,6 @@
 # catalog
 
-A new Flutter project.
+A new Flutter project. This flutter project is for the learning purpose and being created by Pawan.
 
 ## Getting Started
 
