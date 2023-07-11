@@ -36,8 +36,9 @@ class _ContactFormState extends State<ContactForm> {
             ),
             TextFormField(
               onSaved: (value) => _email = value!,
+              validator: _validateEmail,
               decoration: InputDecoration(
-                  labelText: "Name",
+                  labelText: "Email",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5))),
             ),
@@ -46,9 +47,9 @@ class _ContactFormState extends State<ContactForm> {
             ),
             TextFormField(
               onSaved: (value) => _phoneNumber = value!,
-              // validator: ,
+              validator: _validatePhoneNumber,
               decoration: InputDecoration(
-                  labelText: "Name",
+                  labelText: "Phone Number",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5))),
             ),
@@ -67,9 +68,30 @@ class _ContactFormState extends State<ContactForm> {
         ));
   }
 
+  String? _validateEmail(value) {
+    final emailRegex = RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+    if (value!.isEmpty) {
+      return "Enter the email";
+    } else if (!emailRegex.hasMatch(value)) {
+      return "Enter a valid email";
+    }
+    return null;
+  }
+
+  String? _validatePhoneNumber(value) {
+    final phoneRegex = RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]');
+    if (value!.isEmpty) {
+      return "Enter the phone number";
+    } else if (!phoneRegex.hasMatch(value)) {
+      return "Enter a valid email";
+    }
+    return null;
+  }
+
   String? _validateName(value) {
     if (value.isEmpty) {
-      return "enter the name";
+      return "Please Enter the Name first";
     }
 
     return null;
