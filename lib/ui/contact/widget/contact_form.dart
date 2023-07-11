@@ -25,6 +25,7 @@ class _ContactFormState extends State<ContactForm> {
             ),
             TextFormField(
               onSaved: (value) => _name = value!,
+              validator: _validateName,
               decoration: InputDecoration(
                   labelText: "Name",
                   border: OutlineInputBorder(
@@ -45,6 +46,7 @@ class _ContactFormState extends State<ContactForm> {
             ),
             TextFormField(
               onSaved: (value) => _phoneNumber = value!,
+              // validator: ,
               decoration: InputDecoration(
                   labelText: "Name",
                   border: OutlineInputBorder(
@@ -52,14 +54,24 @@ class _ContactFormState extends State<ContactForm> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  _formKey.currentState?.save();
-                  print(_name + " " + _email + " " + _phoneNumber);
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState?.save();
+                    print(_name + " \"" + _email + " " + _phoneNumber);
+                  }
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text("SAVE CONTACT"), Icon(Icons.save)],
+                  children: [Text("SAVE CONTACT"), Icon(Icons.person)],
                 ))
           ],
         ));
+  }
+
+  String? _validateName(value) {
+    if (value.isEmpty) {
+      return "enter the name";
+    }
+
+    return null;
   }
 }
