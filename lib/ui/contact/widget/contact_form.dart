@@ -1,4 +1,7 @@
+import 'package:catalog/data/contact.dart';
+import 'package:catalog/ui/model/contacts_model.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class ContactForm extends StatefulWidget {
   const ContactForm({super.key});
@@ -54,12 +57,7 @@ class _ContactFormState extends State<ContactForm> {
                       borderRadius: BorderRadius.circular(5))),
             ),
             ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState?.save();
-                    print(_name + " \"" + _email + " " + _phoneNumber);
-                  }
-                },
+                onPressed: _onSaveContactButtonPressed,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [Text("SAVE CONTACT"), Icon(Icons.person)],
@@ -80,7 +78,10 @@ class _ContactFormState extends State<ContactForm> {
   }
 
   String? _validatePhoneNumber(value) {
-    final phoneRegex = RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]');
+    // final phoneRegex = RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]');
+    final phoneRegex =
+        RegExp(r'^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$');
+
     if (value!.isEmpty) {
       return "Enter the phone number";
     } else if (!phoneRegex.hasMatch(value)) {
@@ -95,5 +96,14 @@ class _ContactFormState extends State<ContactForm> {
     }
 
     return null;
+  }
+
+  void _onSaveContactButtonPressed() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState?.save();
+      final newContact =
+          Contact(name: _name, email: _email, phoneNumber: _phoneNumber);
+      ScopedModel.of<ContactModel>(context).addContact(newContact);
+    }
   }
 }

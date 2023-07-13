@@ -3,6 +3,10 @@ import 'package:faker/faker.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ContactModel extends Model {
+  // If you don't need to rebuild the widget tree once the model's data changes
+  // (when you only make changes to the model, like in the contactCard),
+  // you don't need to use scopedModelDescendant with a builder, but only simply
+  // call scopedModel.Of<T>() Function;
   late List<Contact> _contacts = List.generate(50, (index) {
     return Contact(
         name: faker.person.firstName() + " " + faker.person.lastName(),
@@ -11,6 +15,12 @@ class ContactModel extends Model {
   });
 
   List<Contact> get contacts => _contacts;
+
+  void addContact(Contact contact) {
+    _contacts.add(contact);
+    notifyListeners();
+  }
+
   void changeFavoriteStatus(int index) {
     _contacts[index].isFavorite = !_contacts[index].isFavorite;
     _sortContacts();

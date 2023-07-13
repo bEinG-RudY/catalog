@@ -19,6 +19,9 @@ class _ContactsListPageState extends State<ContactsListPage> {
       appBar: AppBar(
         title: const Text("Contacts"),
       ),
+
+      // If you need to rebuild the widget tree once the model's data changes
+      // you need to use scopedModelDescendant with a builder;
       body: ScopedModelDescendant<ContactModel>(
           builder: ((context, child, model) {
         return ListView.builder(
