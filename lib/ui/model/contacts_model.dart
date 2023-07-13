@@ -22,7 +22,9 @@ class ContactModel extends Model {
   }
 
   void changeFavoriteStatus(int index) {
+    print(_contacts.length);
     _contacts[index].isFavorite = !_contacts[index].isFavorite;
+    print(_contacts.length);
     _sortContacts();
     notifyListeners();
   }
