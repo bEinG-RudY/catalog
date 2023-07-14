@@ -1,4 +1,5 @@
 import 'package:catalog/data/contact.dart';
+import 'package:catalog/ui/contatcs_list/contacts_list_page.dart';
 import 'package:catalog/ui/model/contacts_model.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -104,6 +105,8 @@ class _ContactFormState extends State<ContactForm> {
       final newContact =
           Contact(name: _name, email: _email, phoneNumber: _phoneNumber);
       ScopedModel.of<ContactModel>(context).addContact(newContact);
+      Navigator.of(context)
+          .pop(MaterialPageRoute(builder: (context) => ContactsListPage()));
     }
   }
 }

@@ -7,7 +7,7 @@ class ContactModel extends Model {
   // (when you only make changes to the model, like in the contactCard),
   // you don't need to use scopedModelDescendant with a builder, but only simply
   // call scopedModel.Of<T>() Function;
-  late List<Contact> _contacts = List.generate(50, (index) {
+  late List<Contact> _contacts = List.generate(5, (index) {
     return Contact(
         name: faker.person.firstName() + " " + faker.person.lastName(),
         email: faker.internet.freeEmail(),

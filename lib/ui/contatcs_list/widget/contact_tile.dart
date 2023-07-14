@@ -13,6 +13,10 @@ class ContactTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // If you don't need to rebuild the widget tree once the model's data changes
+    // (when you only make changes to the model, like in the contactCard),
+    // you don't need to use scopedModelDescendant with a builder, but only simply
+    // call scopedModel.Of<T>() Function;
     final model = ScopedModel.of<ContactModel>(context);
     final displayContact = model.contacts[contactIndex];
     return ListTile(
