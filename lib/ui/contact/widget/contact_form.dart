@@ -5,7 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ContactForm extends StatefulWidget {
-  const ContactForm({super.key});
+  final Contact? editedContact;
+  final int? editedContactIndex;
+
+  ContactForm({
+    Key? key,
+    this.editedContact,
+    this.editedContactIndex,
+  }) : super(key: key);
 
   @override
   State<ContactForm> createState() => _ContactFormState();
@@ -17,6 +24,8 @@ class _ContactFormState extends State<ContactForm> {
   late String _name;
   late String _email;
   late String _phoneNumber;
+
+  bool get isEditMode => widget.editedContact != null;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +39,7 @@ class _ContactFormState extends State<ContactForm> {
             TextFormField(
               onSaved: (value) => _name = value!,
               validator: _validateName,
+              initialValue: widget.editedContact?.name,
               decoration: InputDecoration(
                   labelText: "Name",
                   border: OutlineInputBorder(
@@ -41,6 +51,7 @@ class _ContactFormState extends State<ContactForm> {
             TextFormField(
               onSaved: (value) => _email = value!,
               validator: _validateEmail,
+              initialValue: widget.editedContact?.email,
               decoration: InputDecoration(
                   labelText: "Email",
                   border: OutlineInputBorder(
@@ -52,6 +63,7 @@ class _ContactFormState extends State<ContactForm> {
             TextFormField(
               onSaved: (value) => _phoneNumber = value!,
               validator: _validatePhoneNumber,
+              initialValue: widget.editedContact?.phoneNumber,
               decoration: InputDecoration(
                   labelText: "Phone Number",
                   border: OutlineInputBorder(
@@ -102,11 +114,23 @@ class _ContactFormState extends State<ContactForm> {
   void _onSaveContactButtonPressed() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState?.save();
-      final newContact =
-          Contact(name: _name, email: _email, phoneNumber: _phoneNumber);
-      ScopedModel.of<ContactModel>(context).addContact(newContact);
-      Navigator.of(context)
-          .pop(MaterialPageRoute(builder: (context) => ContactsListPage()));
+      final newOrEditedContact = Contact(
+        name: _name,
+        email: _email,
+        phoneNumber: _phoneNumber,
+        // elvis operator (?.) returns null if editContact is null,
+        // Null Coalescing operator(??)
+        // If the left side is null, it returns the right side;
+        isFavorite: widget.editedContact?.isFavorite ?? false,
+      );
+
+      if (isEditMode) {
+        ScopedModel.of<ContactModel>(context)
+            .updateContact(newOrEditedContact, widget.editedContactIndex!);
+      } else {
+        ScopedModel.of<ContactModel>(context).addContact(newOrEditedContact);
+      }
+      Navigator.of(context).pop();
     }
   }
 }
