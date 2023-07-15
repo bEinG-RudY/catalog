@@ -43,6 +43,7 @@ class ContactTile extends StatelessWidget {
     return ListTile(
         title: Text(displayContact.name),
         subtitle: Text(displayContact.email),
+        leading: CircleAvatar(child: Text(displayContact.name[0])),
         trailing: IconButton(
           icon: Icon(displayContact.isFavorite ? Icons.star : Icons.star_border,
               color: displayContact.isFavorite ? Colors.amber : Colors.grey),

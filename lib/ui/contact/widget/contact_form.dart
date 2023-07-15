@@ -34,6 +34,10 @@ class _ContactFormState extends State<ContactForm> {
         child: ListView(
           children: [
             SizedBox(
+              height: 20,
+            ),
+            _buildContactPicture(),
+            const SizedBox(
               height: 10,
             ),
             TextFormField(
@@ -101,6 +105,28 @@ class _ContactFormState extends State<ContactForm> {
       return "Enter a valid email";
     }
     return null;
+  }
+
+  Widget _buildContactPicture() {
+    final halfScreenDiameter = MediaQuery.of(context).size.width / 2;
+    return CircleAvatar(
+      radius: halfScreenDiameter / 2,
+      child: _buildCircleAvatarContent(halfScreenDiameter),
+    );
+  }
+
+  Widget _buildCircleAvatarContent(double halfScreenDiameter) {
+    if (isEditMode) {
+      return Text(
+        widget.editedContact!.name[0],
+        style: TextStyle(fontSize: halfScreenDiameter / 2),
+      );
+    } else {
+      return Icon(
+        Icons.person,
+        size: halfScreenDiameter / 2,
+      );
+    }
   }
 
   String? _validateName(value) {
