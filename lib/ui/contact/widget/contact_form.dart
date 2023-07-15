@@ -1,14 +1,15 @@
+import 'dart:io';
 import 'package:catalog/data/contact.dart';
-import 'package:catalog/ui/contatcs_list/contacts_list_page.dart';
 import 'package:catalog/ui/model/contacts_model.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ContactForm extends StatefulWidget {
   final Contact? editedContact;
   final int? editedContactIndex;
 
-  ContactForm({
+  const ContactForm({
     Key? key,
     this.editedContact,
     this.editedContactIndex,
@@ -24,6 +25,7 @@ class _ContactFormState extends State<ContactForm> {
   late String _name;
   late String _email;
   late String _phoneNumber;
+  late File? _contactImageFile;
 
   bool get isEditMode => widget.editedContact != null;
 
@@ -49,7 +51,7 @@ class _ContactFormState extends State<ContactForm> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5))),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextFormField(
@@ -110,20 +112,44 @@ class _ContactFormState extends State<ContactForm> {
   Widget _buildContactPicture() {
     final halfScreenDiameter = MediaQuery.of(context).size.width / 2;
     return Hero(
+      // if there no matching tags found in both routes
+      // the hero animation will not take place
       tag: widget.editedContact?.hashCode ?? 0,
-      child: CircleAvatar(
-        radius: halfScreenDiameter / 2,
-        child: _buildCircleAvatarContent(halfScreenDiameter),
+      child: GestureDetector(
+        onTap: _onContactPictureTapped,
+        child: CircleAvatar(
+          radius: halfScreenDiameter / 2,
+          child: _buildCircleAvatarContent(halfScreenDiameter),
+        ),
       ),
     );
   }
 
+  void _onContactPictureTapped() async {
+    final XFile? imageFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    // final File? _contactImageFile = File(imageFile!.path);
+    if (imageFile != null) {
+      setState(() {
+        _contactImageFile = File(imageFile.path);
+      });
+    }
+    // setState(() {
+    // _contactImageFile = File(imageFile!.path);
+    // });
+  }
+
   Widget _buildCircleAvatarContent(double halfScreenDiameter) {
     if (isEditMode) {
-      return Text(
-        widget.editedContact!.name[0],
-        style: TextStyle(fontSize: halfScreenDiameter / 2),
-      );
+      if (_contactImageFile == null) {
+        return Text(
+          widget.editedContact!.name[0],
+          style: TextStyle(fontSize: halfScreenDiameter / 2),
+        );
+      } else {
+        return Image.file(_contactImageFile!);
+      }
     } else {
       return Icon(
         Icons.person,
