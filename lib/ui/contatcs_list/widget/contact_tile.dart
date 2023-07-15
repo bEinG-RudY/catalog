@@ -43,7 +43,7 @@ class ContactTile extends StatelessWidget {
     return ListTile(
         title: Text(displayContact.name),
         subtitle: Text(displayContact.email),
-        leading: CircleAvatar(child: Text(displayContact.name[0])),
+        leading: _buildCircleAvatar(displayContact),
         trailing: IconButton(
           icon: Icon(displayContact.isFavorite ? Icons.star : Icons.star_border,
               color: displayContact.isFavorite ? Colors.amber : Colors.grey),
@@ -56,4 +56,13 @@ class ContactTile extends StatelessWidget {
                 editedContact: displayContact,
                 editedContactIndex: contactIndex))));
   }
+
+  Hero _buildCircleAvatar(Contact displayContact) =>
+      // Hero widget facilitates a hero animation between routes(pages) in a simple way.
+      // It's important that the tag is the SAME and UNIQUE in both routes;
+      Hero(
+          // hashcode return a fairly unique integer based on
+          // the content of the displayContact object;
+          tag: displayContact.hashCode,
+          child: CircleAvatar(child: Text(displayContact.name[0])));
 }

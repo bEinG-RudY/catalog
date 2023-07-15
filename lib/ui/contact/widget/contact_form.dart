@@ -109,9 +109,12 @@ class _ContactFormState extends State<ContactForm> {
 
   Widget _buildContactPicture() {
     final halfScreenDiameter = MediaQuery.of(context).size.width / 2;
-    return CircleAvatar(
-      radius: halfScreenDiameter / 2,
-      child: _buildCircleAvatarContent(halfScreenDiameter),
+    return Hero(
+      tag: widget.editedContact?.hashCode ?? 0,
+      child: CircleAvatar(
+        radius: halfScreenDiameter / 2,
+        child: _buildCircleAvatarContent(halfScreenDiameter),
+      ),
     );
   }
 
