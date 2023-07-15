@@ -2,6 +2,7 @@ import 'package:catalog/ui/contact/Contact_edit_page.dart';
 import 'package:catalog/ui/model/contacts_model.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../../data/contact.dart';
 
@@ -20,6 +21,25 @@ class ContactTile extends StatelessWidget {
     // call scopedModel.Of<T>() Function;
     final model = ScopedModel.of<ContactModel>(context);
     final displayContact = model.contacts[contactIndex];
+    return Slidable(
+      endActionPane: ActionPane(motion: BehindMotion(), children: [
+        SlidableAction(
+          flex: 1,
+          onPressed: (context) {
+            model.deleteContact(contactIndex);
+          },
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+          icon: Icons.delete,
+          label: 'Delete',
+        ),
+      ]),
+      child: _buildContent(displayContact, model, context),
+    );
+  }
+
+  ListTile _buildContent(
+      Contact displayContact, ContactModel model, BuildContext context) {
     return ListTile(
         title: Text(displayContact.name),
         subtitle: Text(displayContact.email),
