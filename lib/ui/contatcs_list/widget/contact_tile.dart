@@ -64,5 +64,22 @@ class ContactTile extends StatelessWidget {
           // hashcode return a fairly unique integer based on
           // the content of the displayContact object;
           tag: displayContact.hashCode,
-          child: CircleAvatar(child: Text(displayContact.name[0])));
+          child:
+              CircleAvatar(child: _buildCircleAvatarContent(displayContact)));
+
+  Widget _buildCircleAvatarContent(Contact displayContact) {
+    if (displayContact.imageFile == null) {
+      return Text(displayContact.name[0]);
+    } else {
+      return ClipOval(
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Image.file(
+            displayContact.imageFile!,
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+  }
 }

@@ -25,9 +25,16 @@ class _ContactFormState extends State<ContactForm> {
   late String _name;
   late String _email;
   late String _phoneNumber;
-  late File? _contactImageFile;
+  File? _contactImageFile;
 
   bool get isEditMode => widget.editedContact != null;
+  bool get hasSelectedCustomImage => _contactImageFile != null;
+
+  @override
+  void initState() {
+    super.initState();
+    _contactImageFile = widget.editedContact?.imageFile;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,32 +135,42 @@ class _ContactFormState extends State<ContactForm> {
   void _onContactPictureTapped() async {
     final XFile? imageFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
-
-    // final File? _contactImageFile = File(imageFile!.path);
     if (imageFile != null) {
       setState(() {
         _contactImageFile = File(imageFile.path);
       });
     }
-    // setState(() {
-    // _contactImageFile = File(imageFile!.path);
-    // });
   }
 
   Widget _buildCircleAvatarContent(double halfScreenDiameter) {
-    if (isEditMode) {
-      if (_contactImageFile == null) {
-        return Text(
-          widget.editedContact!.name[0],
-          style: TextStyle(fontSize: halfScreenDiameter / 2),
-        );
-      } else {
-        return Image.file(_contactImageFile!);
-      }
+    if (isEditMode || hasSelectedCustomImage) {
+      return _buildEditModeCircleAvatarContent(halfScreenDiameter);
     } else {
       return Icon(
         Icons.person,
         size: halfScreenDiameter / 2,
+      );
+    }
+  }
+
+  Widget _buildEditModeCircleAvatarContent(double halfScreenDiameter) {
+    if (_contactImageFile == null) {
+      return Text(
+        widget.editedContact!.name[0],
+        style: TextStyle(fontSize: halfScreenDiameter / 2),
+      );
+    } else {
+      // Makes it's child oval to fit "ovalness" of CircleAvatar
+      return ClipOval(
+        // We Want to transform the image into square and fit the
+        // CircleAvatar that's why default aspect ratio is set
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Image.file(
+            _contactImageFile!,
+            fit: BoxFit.cover,
+          ),
+        ),
       );
     }
   }
@@ -177,6 +194,7 @@ class _ContactFormState extends State<ContactForm> {
         // Null Coalescing operator(??)
         // If the left side is null, it returns the right side;
         isFavorite: widget.editedContact?.isFavorite ?? false,
+        imageFile: _contactImageFile,
       );
 
       if (isEditMode) {
