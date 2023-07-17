@@ -137,6 +137,9 @@ class _ContactFormState extends State<ContactForm> {
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (imageFile != null) {
       setState(() {
+        // If there is an imageFilePath, We need to convert it to File
+        // otherwise it'll give you an error of "XFile is not subtype of File"
+        //or set it to null by default;
         _contactImageFile = File(imageFile.path);
       });
     }
