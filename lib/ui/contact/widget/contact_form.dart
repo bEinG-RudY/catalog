@@ -201,6 +201,7 @@ class _ContactFormState extends State<ContactForm> {
       );
 
       if (isEditMode) {
+        newOrEditedContact.id = widget.editedContact!.id;
         ScopedModel.of<ContactModel>(context)
             .updateContact(newOrEditedContact, widget.editedContactIndex!);
       } else {
