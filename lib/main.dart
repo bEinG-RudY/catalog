@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScopedModel(
-      model: ContactModel(),
+      // Load all contacts from the database as soon as the app starts
+      model: ContactModel()..loadContacts(),
       child: MaterialApp(
         title: 'Contacts',
         theme: ThemeData(

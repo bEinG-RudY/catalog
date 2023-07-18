@@ -1,33 +1,50 @@
 import 'package:catalog/data/contact.dart';
-import 'package:faker/faker.dart';
+import 'package:catalog/data/db/contact_dao.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ContactModel extends Model {
+  final ContactDao _contactDao = ContactDao();
+
   // If you don't need to rebuild the widget tree once the model's data changes
   // (when you only make changes to the model, like in the contactCard),
   // you don't need to use scopedModelDescendant with a builder, but only simply
   // call scopedModel.Of<T>() Function;
-  late List<Contact> _contacts = List.generate(5, (index) {
+  late List<Contact>
+      _contacts; /*= List.generate(5, (index) {
     return Contact(
         name: faker.person.firstName() + " " + faker.person.lastName(),
         email: faker.internet.freeEmail(),
         phoneNumber: faker.randomGenerator.integer(1000000000).toString());
-  });
+  });*/
+
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
 
   List<Contact> get contacts => _contacts;
 
-  void addContact(Contact contact) {
-    _contacts.add(contact);
+  Future loadContacts() async {
+    _isLoading = true;
+    notifyListeners();
+    _contacts = await _contactDao.getAllInSortedOrder();
+    _isLoading = false;
     notifyListeners();
   }
 
-  void updateContact(Contact contact, int contactIndex) {
-    _contacts[contactIndex] = contact;
+  Future addContact(Contact contact) async {
+    await _contactDao.insert(contact);
+    await loadContacts();
     notifyListeners();
   }
 
-  void deleteContact(int Index) {
-    _contacts.removeAt(Index);
+  Future updateContact(Contact contact) async {
+    await _contactDao.update(contact);
+    await loadContacts();
+    notifyListeners();
+  }
+
+  Future deleteContact(Contact contact) async {
+    await _contactDao.delete(contact);
+    await loadContacts();
     notifyListeners();
   }
 
@@ -35,33 +52,32 @@ class ContactModel extends Model {
     print(_contacts.length);
     _contacts[index].isFavorite = !_contacts[index].isFavorite;
     print(_contacts.length);
-    _sortContacts();
     notifyListeners();
   }
 
-  void _sortContacts() {
-    _contacts.sort(((a, b) {
-      int comparisonResult;
-      comparisonResult = _compareBasedonFavoriteStatus(a, b);
-      if (comparisonResult == 0) {
-        comparisonResult = _compareAlphabatically(a, b);
-      }
+  // void _sortContacts() {
+  //   _contacts.sort(((a, b) {
+  //     int comparisonResult;
+  //     comparisonResult = _compareBasedonFavoriteStatus(a, b);
+  //     if (comparisonResult == 0) {
+  //       comparisonResult = _compareAlphabatically(a, b);
+  //     }
 
-      return comparisonResult;
-    }));
-  }
+  //     return comparisonResult;
+  //   }));
+  // }
 
-  int _compareBasedonFavoriteStatus(Contact a, Contact b) {
-    if (a.isFavorite) {
-      return -1;
-    } else if (b.isFavorite) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
+  // int _compareBasedonFavoriteStatus(Contact a, Contact b) {
+  //   if (a.isFavorite) {
+  //     return -1;
+  //   } else if (b.isFavorite) {
+  //     return 1;
+  //   } else {
+  //     return 0;
+  //   }
+  // }
 
-  int _compareAlphabatically(Contact a, Contact b) {
-    return a.name.compareTo(b.name);
-  }
+  // int _compareAlphabatically(Contact a, Contact b) {
+  //   return a.name.compareTo(b.name);
+  // }
 }

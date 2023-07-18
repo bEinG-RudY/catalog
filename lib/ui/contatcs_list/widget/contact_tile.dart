@@ -26,7 +26,7 @@ class ContactTile extends StatelessWidget {
         SlidableAction(
           flex: 1,
           onPressed: (context) {
-            model.deleteContact(contactIndex);
+            model.deleteContact(displayContact);
           },
           backgroundColor: Colors.red,
           foregroundColor: Colors.white,
@@ -53,8 +53,8 @@ class ContactTile extends StatelessWidget {
         ),
         onTap: () => Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ContactEditPage(
-                editedContact: displayContact,
-                editedContactIndex: contactIndex))));
+                  editedContact: displayContact,
+                ))));
   }
 
   Hero _buildCircleAvatar(Contact displayContact) =>

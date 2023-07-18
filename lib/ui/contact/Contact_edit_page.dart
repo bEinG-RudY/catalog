@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 
 class ContactEditPage extends StatelessWidget {
   final Contact editedContact;
-  final int editedContactIndex;
 
-  const ContactEditPage(
-      {Key? key, required this.editedContact, required this.editedContactIndex})
+  const ContactEditPage({Key? key, required this.editedContact})
       : super(key: key);
 
   @override
@@ -18,7 +16,6 @@ class ContactEditPage extends StatelessWidget {
       ),
       body: ContactForm(
         editedContact: editedContact,
-        editedContactIndex: editedContactIndex,
       ),
     );
   }
