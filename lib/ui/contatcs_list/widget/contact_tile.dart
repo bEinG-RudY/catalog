@@ -48,7 +48,7 @@ class ContactTile extends StatelessWidget {
           icon: Icon(displayContact.isFavorite ? Icons.star : Icons.star_border,
               color: displayContact.isFavorite ? Colors.amber : Colors.grey),
           onPressed: () {
-            model.changeFavoriteStatus(contactIndex);
+            model.changeFavoriteStatus(displayContact);
           },
         ),
         onTap: () => Navigator.of(context).push(MaterialPageRoute(

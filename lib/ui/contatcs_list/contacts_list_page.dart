@@ -25,14 +25,18 @@ class _ContactsListPageState extends State<ContactsListPage> {
       // you need to use scopedModelDescendant with a builder;
       body: ScopedModelDescendant<ContactModel>(
           builder: ((context, child, model) {
-        return ListView.builder(
-          itemCount: model.contacts.length,
-          itemBuilder: ((context, index) {
-            return new ContactTile(
-              contactIndex: index,
-            );
-          }),
-        );
+        if (model.isLoading) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          return ListView.builder(
+            itemCount: model.contacts.length,
+            itemBuilder: ((context, index) {
+              return new ContactTile(
+                contactIndex: index,
+              );
+            }),
+          );
+        }
       })),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

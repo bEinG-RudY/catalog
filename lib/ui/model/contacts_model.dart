@@ -48,10 +48,13 @@ class ContactModel extends Model {
     notifyListeners();
   }
 
-  void changeFavoriteStatus(int index) {
-    print(_contacts.length);
-    _contacts[index].isFavorite = !_contacts[index].isFavorite;
-    print(_contacts.length);
+  Future changeFavoriteStatus(Contact contact) async {
+    contact.isFavorite = !contact.isFavorite;
+    await _contactDao.update(contact);
+    // Even though we are loading all contacts, we don't want to change isLoading to true.
+    // That's because it woud look silly to display the loading indicator after only
+    // hangin the favorite status.
+    _contacts = await _contactDao.getAllInSortedOrder();
     notifyListeners();
   }
 

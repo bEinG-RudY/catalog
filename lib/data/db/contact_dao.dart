@@ -33,7 +33,7 @@ class ContactDao {
     final finder = Finder(sortOrders: [
       // false indicates that isFavorite will be sorted i descending Order
       // false should be displayed after true for isFavorite.
-      SortOrder('isFAvorite', false),
+      SortOrder('isFavorite', false),
       SortOrder('name'),
     ]);
 
