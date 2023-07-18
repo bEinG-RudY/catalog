@@ -34,6 +34,23 @@ class ContactTile extends StatelessWidget {
           label: 'Delete',
         ),
       ]),
+      startActionPane: ActionPane(
+        motion: BehindMotion(),
+        children: [
+          SlidableAction(
+              onPressed: (Contact) {},
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
+              icon: Icons.call,
+              label: 'Call'),
+          SlidableAction(
+              onPressed: (contact) {},
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
+              icon: Icons.mail,
+              label: 'Email')
+        ],
+      ),
       child: _buildContent(displayContact, model, context),
     );
   }
