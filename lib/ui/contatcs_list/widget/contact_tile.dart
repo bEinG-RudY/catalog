@@ -3,7 +3,7 @@ import 'package:catalog/ui/model/contacts_model.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import '../../../data/contact.dart';
 
 class ContactTile extends StatelessWidget {
@@ -38,14 +38,18 @@ class ContactTile extends StatelessWidget {
         motion: BehindMotion(),
         children: [
           SlidableAction(
-              onPressed: (Contact) {},
+              flex: 1,
+              onPressed: (context) async =>
+                  _callPhoneNumber(context, displayContact.phoneNumber),
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
               icon: Icons.call,
               label: 'Call'),
           SlidableAction(
-              onPressed: (contact) {},
-              backgroundColor: Colors.green,
+              flex: 1,
+              onPressed: (contact) =>
+                  _writeEmail(context, displayContact.email),
+              backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
               icon: Icons.mail,
               label: 'Email')
@@ -53,6 +57,46 @@ class ContactTile extends StatelessWidget {
       ),
       child: _buildContent(displayContact, model, context),
     );
+  }
+
+  Future _callPhoneNumber(
+    BuildContext context,
+    String number,
+  ) async {
+    final Uri url = Uri(
+      scheme: 'tel',
+      path: number,
+    );
+    // final _url = 'tel:$url';
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      final snackbar = SnackBar(
+        content: Text('Connot make a call'),
+      );
+      // Showing error message
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    }
+  }
+
+  Future _writeEmail(
+    BuildContext context,
+    String emailAddress,
+  ) async {
+    final Uri url = Uri(
+      scheme: 'mailto',
+      path: emailAddress,
+    );
+    // final _url = 'tel:$url';
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      final snackbar = SnackBar(
+        content: Text('Connot write an Email'),
+      );
+      // Showing error message
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    }
   }
 
   ListTile _buildContent(

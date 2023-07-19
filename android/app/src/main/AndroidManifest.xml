@@ -31,4 +31,21 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <queries>
+    <!-- Place inside the <queries> element. -->
+<intent>
+  <action android:name="android.intent.action.VIEW" />
+  <category android:name="android.intent.category.DEFAULT" />
+  <!-- <data android:scheme="mailto" /> -->
+  <data android:scheme="tel" />
+</intent>
+</queries>
+<queries>
+<intent>
+  <action android:name="android.intent.action.VIEW" />
+  <category android:name="android.intent.category.DEFAULT" />
+  <data android:scheme="mailto" />
+  <!-- <data android:scheme="tel" /> -->
+</intent>
+</queries>
 </manifest>

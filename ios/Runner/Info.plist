@@ -47,6 +47,13 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+  		<string>mailto</string>
+ 		<string>tel</string>
+	</array>
+	
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs to acces photo library for adding contact picture.</string>
 	<key>NSCameraUsageDescription</key>
